@@ -119,7 +119,7 @@ Citizen.CreateThread(function()
                 sleep = false
                 local label  = CreateVarString(10, 'LITERAL_STRING', Config.Language.sell)
                      PromptSetActiveGroupThisFrame(prompts, label)
-                if Citizen.InvokeNative(0xC92AC953F0A982AE,openButcher) then
+                if Citizen.InvokeNative(0xC92AC953F0A982AE,openTrainer) then
               
                     if Config.joblocked then 
                         TriggerEvent('vorp:ExecuteServerCallBack','vorp_sellhorse:getjob', function(result)  
