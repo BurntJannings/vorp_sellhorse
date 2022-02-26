@@ -1,4 +1,5 @@
 local VORPCore = {}
+local prompts = GetRandomIntInRange(0, 0xffffff)
 
 Citizen.CreateThread(function()
     while not VORPCore do        
@@ -92,15 +93,21 @@ function sellAnimal() -- Selling horse function
     end
 end
 
-function DrawTxt(str, x, y, w, h, enableShadow, col1, col2, col3, a, centre)
-    local str = CreateVarString(10, "LITERAL_STRING", str)
-    SetTextScale(w, h)
-    SetTextColor(math.floor(col1), math.floor(col2), math.floor(col3), math.floor(a))
-	SetTextCentre(centre)
-    if enableShadow then SetTextDropshadow(1, 0, 0, 0, 255) end
-	Citizen.InvokeNative(0xADA9255D, 1);
-    DisplayText(str, x, y)
-end
+Citizen.CreateThread(function()
+    Citizen.Wait(5000)
+    local str = Config.Language.press 
+	openTrainer = PromptRegisterBegin()
+	PromptSetControlAction(openTrainer, Config.keys["G"])
+	str = CreateVarString(10, 'LITERAL_STRING', str)
+	PromptSetText(openTrainer, str)
+	PromptSetEnabled(openTrainer, 1)
+	PromptSetVisible(openTrainer, 1)
+	PromptSetStandardMode(openTrainer,1)
+    PromptSetHoldMode(openTrainer, 1)
+	PromptSetGroup(openTrainer, prompts)
+	Citizen.InvokeNative(0xC5F428EE08FA7F2C,openTrainer,true)
+	PromptRegisterEnd(openTrainer)
+end)
 
 Citizen.CreateThread(function()
     while true do
@@ -110,8 +117,10 @@ Citizen.CreateThread(function()
             if Vdist(playerCoords, v.coords) <= v.radius then -- Checking distance between player and trainer
                 local job
                 sleep = false
-                DrawTxt(v.pressToSell, 0.50, 0.90, 0.7, 0.7, true, 255, 255, 255, 255, true,true)
-                if IsControlJustPressed(2, 0xD9D0E1C0) then
+                local label  = CreateVarString(10, 'LITERAL_STRING', Config.Language.sell)
+                     PromptSetActiveGroupThisFrame(prompts, label)
+                if Citizen.InvokeNative(0xC92AC953F0A982AE,openButcher) then
+              
                     if Config.joblocked then 
                         TriggerEvent('vorp:ExecuteServerCallBack','vorp_sellhorse:getjob', function(result)  
                             job =   result
