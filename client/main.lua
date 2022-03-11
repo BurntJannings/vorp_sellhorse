@@ -1,5 +1,4 @@
 local VORPCore = {}
-local prompts = GetRandomIntInRange(0, 0xffffff)
 
 Citizen.CreateThread(function()
     while not VORPCore do        
@@ -43,6 +42,18 @@ function startTrainer() -- Loading Trainer Function
         SetBlipSprite(blip, v.blip, true) -- Blip Texture
         Citizen.InvokeNative(0x9CB1A1623062F402, blip, v.trainername) -- Name of Blip
     end
+end
+
+function drawTxt(text, x, y, fontscale, fontsize, r, g, b, alpha, textcentred, shadow) -- Text function
+    local str = CreateVarString(10, "LITERAL_STRING", text)
+    SetTextScale(fontscale, fontsize)
+    SetTextColor(r, g, b, alpha)
+    SetTextCentre(textcentred)
+    if shadow then 
+        SetTextDropshadow(1, 0, 0, 255)
+    end
+    SetTextFontForCurrentCommand(1)
+    DisplayText(str, x, y)
 end
 
 -- Updated 1/30: Can not longer sell players horses! Including AI!
@@ -94,22 +105,6 @@ function sellAnimal() -- Selling horse function
 end
 
 Citizen.CreateThread(function()
-    Citizen.Wait(5000)
-    local str = Config.Language.press 
-	openTrainer = PromptRegisterBegin()
-	PromptSetControlAction(openTrainer, Config.keys["G"])
-	str = CreateVarString(10, 'LITERAL_STRING', str)
-	PromptSetText(openTrainer, str)
-	PromptSetEnabled(openTrainer, 1)
-	PromptSetVisible(openTrainer, 1)
-	PromptSetStandardMode(openTrainer,1)
-    PromptSetHoldMode(openTrainer, 1)
-	PromptSetGroup(openTrainer, prompts)
-	Citizen.InvokeNative(0xC5F428EE08FA7F2C,openTrainer,true)
-	PromptRegisterEnd(openTrainer)
-end)
-
-Citizen.CreateThread(function()
     while true do
         local sleep = true
         for i,v in ipairs(Config.trainers) do
@@ -117,10 +112,8 @@ Citizen.CreateThread(function()
             if Vdist(playerCoords, v.coords) <= v.radius then -- Checking distance between player and trainer
                 local job
                 sleep = false
-                local label  = CreateVarString(10, 'LITERAL_STRING', Config.Language.sell)
-                     PromptSetActiveGroupThisFrame(prompts, label)
-                if Citizen.InvokeNative(0xC92AC953F0A982AE,openTrainer) then
-              
+                drawTxt(v.pressToSell, 0.5, 0.9, 0.7, 0.7, 255, 255, 255, 255, true, true)
+                if IsControlJustPressed(2, 0xD9D0E1C0) then
                     if Config.joblocked then 
                         TriggerEvent('vorp:ExecuteServerCallBack','vorp_sellhorse:getjob', function(result)  
                             job =   result
