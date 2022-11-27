@@ -114,4 +114,4 @@ AddEventHandler("vorp_sellhorse:delete", function()
 
     exports.ghmattimysql:execute("DELETE FROM sellhorse WHERE identifier = @identifier AND characterid = @characterid", {["@identifier"] = steam_id, ["@characterid"] = Character})
 
-end)
+end) 
