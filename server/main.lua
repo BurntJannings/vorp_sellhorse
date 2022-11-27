@@ -18,7 +18,7 @@ AddEventHandler("vorp_sellhorse:salecompletesv", function(money, gold, rolPoints
     local _source = source
     local Character = VorpCore.getUser(_source).getUsedCharacter
 
-    TriggerEvent("vorp_sellhorse:timer", _source)
+    TriggerEvent("vorp_sellhorse:settimer", _source)
 
         Character.addCurrency(0, money)
 
