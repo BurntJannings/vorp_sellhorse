@@ -11,6 +11,8 @@ Config.Language = {
 Config.aiTrainerped = true -- spawn ai trainer ped set to false if you dont want an ai trainer ped to spawn 
 Config.joblocked = false -- lock the trainer so only people with the job can access. u can change access to each trainer by editing this  ["trainerjob"] = "trainer"
 
+Config.usecooldown = false
+Config.sellcooldown = 120 -- Amount of minutes for cooldown
 
 Config.trainers = {
     {["trainername"] = "Valentine Trainer", ["trainerjob"] = "trainer",     ["pressToSell"] = "Press [~e~Space~q~] to sell",  ["blip"] = -1103135225,  ["npcmodel"] = "A_M_M_ValFarmer_01",  ["coords"] = vector3(-383.248, 785.823, 114.956),       ["heading"] = 93.60,             ["radius"] = 3.0},
