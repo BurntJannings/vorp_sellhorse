@@ -86,11 +86,11 @@ function sellAnimal() -- Selling horse function
        if tamestate > 0 then -- checks to see if you recently broke the horse in
             if Config.Animals[model] ~= nil then -- Paying for animals
                 local animal = Config.Animals[model]
-                local money = animal.money
-                local gold = animal.gold
-                local rolPoints = animal.rolPoints
-                local xp = animal.xp               
-                TriggerServerEvent("vorp_sellhorse:salecompletesv", money, gold, rolPoints, xp) 
+                local horsemoney = animal.money
+                local horsegold = animal.gold
+                local horserolPoints = animal.rolPoints
+                local horsexp = animal.xp               
+                TriggerServerEvent("vorp_sellhorse:salecompletesv", horsemoney, horsegold, horserolPoints, horsexp) 
                 TriggerEvent("vorp:TipRight", Config.Language.AnimalSold, 5000) -- Sold notification
                 TriggerEvent("vorp:TipRight", "You got "..money, 5000) -- Sold notification
                 DeletePed(horse)
