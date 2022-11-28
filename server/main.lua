@@ -24,10 +24,16 @@ AddEventHandler("vorp_sellhorse:salecompletesv", function(animal)
 
     TriggerEvent("vorp_sellhorse:settimer", _source)
 
+           if amountmoney then
         Character.addCurrency(0, amountmoney)
-
+        TriggerClientEvent("vorp:TipRight",_source, "You got "..money, 5000) -- Sold notification      
+           end
+        
+            if amountgold then 
         Character.addCurrency(1, amountgold)
-    
+        TriggerClientEvent("vorp:TipRight",_source, "You got "..gold, 5000) -- Sold notification
+            end
+        
         Character.addCurrency(2, amountrolPoints)
     
         Character.addXp(amountxp)
