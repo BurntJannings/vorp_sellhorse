@@ -14,19 +14,23 @@ local steam_id
 local Character
 
 RegisterServerEvent("vorp_sellhorse:salecompletesv")
-AddEventHandler("vorp_sellhorse:salecompletesv", function(horsemoney, horsegold, horserolPoints, horsexp)
+AddEventHandler("vorp_sellhorse:salecompletesv", function(animal)
     local _source = source
     local Character = VorpCore.getUser(_source).getUsedCharacter
+    local amountmoney = animal.money
+    local amountgold = animal.gold
+    local amountrolPoints = animal.rolPoints
+    local amountxp = animal.xp     
 
     TriggerEvent("vorp_sellhorse:settimer", _source)
 
-        Character.addCurrency(0, horsemoney)
+        Character.addCurrency(0, amountmoney)
 
-        Character.addCurrency(1, horsegold)
+        Character.addCurrency(1, amountgold)
     
-        Character.addCurrency(2, horserolPoints)
+        Character.addCurrency(2, amountrolPoints)
     
-        Character.addXp(horsexp)
+        Character.addXp(amountxp)
 
 end)
 
