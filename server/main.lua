@@ -1,12 +1,12 @@
 local VorpCore = {}
-VorpInv = exports.vorp_inventory:vorp_inventoryApi()
-
-VORP = exports.vorp_core:vorpAPI()
-local VORP_API = {}
 
 TriggerEvent("getCore",function(core)
     VorpCore = core
 end)
+
+local VORPInv = {}
+
+VORPInv = exports.vorp_inventory:vorp_inventoryApi()
 
 local User
 local CharInfo
