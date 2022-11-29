@@ -31,11 +31,11 @@ RegisterServerEvent("vorp_sellhorse:salecompletesv", function(animal)
 
 end)
 
-RegisterServerEvent('vorp_sellhorse:getjob', function(source, cb)
+RegisterServerEvent('vorp_sellhorse:getjob', function()
     local _source = source
-    local Character = VorpCore.getUser(source).getUsedCharacter
+    local Character = VorpCore.getUser(_source).getUsedCharacter
     local job = Character.job
-    cb(job)
+    TriggerClientEvent('vorp_sellhorse:sendjob', _source, job)
 end)
 
 RegisterServerEvent('vorp_sellhorse:settimer') --Sell horse event
