@@ -1,5 +1,6 @@
 local VORPCore = {}
 local sold = false
+local Playerjob
 
 Citizen.CreateThread(function()
     while not VORPCore do        
@@ -14,6 +15,11 @@ RegisterNetEvent("vorp:SelectedCharacter") -- NPC loads after selecting characte
 AddEventHandler("vorp:SelectedCharacter", function(charid)
     startTrainer()
     TriggerServerEvent('vorp_sellhorse:checktime')
+end)
+
+RegisterNetEvent("vorp_sellhorse:sendjob", function(job)
+Playerjob = job
+
 end)
 
 function startTrainer() -- Loading Trainer Function
@@ -64,16 +70,18 @@ local tamestate = 0
 
 Citizen.CreateThread(function() -- captures event when you break horse in
 	while true do
+	if not IsEntityDead(PlayerPedId()) then
 		Citizen.Wait(1) 
 		local size = GetNumberOfEvents(0) 
 		if size > 0 then 
 			for i = 0, size - 1 do
 				local eventAtIndex = GetEventAtIndex(0, i)
-                if eventAtIndex == GetHashKey("EVENT_HORSE_BROKEN") then
-                    tamestate = 1
-                end
+                	if eventAtIndex == GetHashKey("EVENT_HORSE_BROKEN") then
+                    	tamestate = 1
+                	end
+            	end
             end
-        end
+	end
     end
 end)
 
@@ -86,9 +94,9 @@ function sellAnimal() -- Selling horse function
        if tamestate > 0 then -- checks to see if you recently broke the horse in
             if Config.Animals[model] ~= nil then -- Paying for animals
                 local animal = Config.Animals[model]          
-                TriggerServerEvent("vorp_sellhorse:giveReward", animal)       
-                TriggerEvent("vorp:TipRight", Config.Language.AnimalSold, 5000) -- Sold notification
-                DeletePed(horse)
+                TriggerServerEvent("vorp_sellhorse:giveReward", animal)   
+		VORPcore.NotifyRightTip(Config.Language.AnimalSold,4000)
+		DeletePed(horse)
                 if Config.usecooldown then
                 TriggerEvent('vorp_sellhorse:loggedtime', Config.sellcooldown)
                  Wait(100) 
@@ -98,17 +106,17 @@ function sellAnimal() -- Selling horse function
                 tamestate = 0	
                 end
             else
-                TriggerEvent("vorp:TipRight", Config.Language.NotInTheTrainer, 4000) -- Notification when horse is not recognized
+		VORPcore.NotifyRightTip(Config.Language.NotInTheTrainer,4000)
             end
         else
-            TriggerEvent("vorp:TipRight", Config.Language.NotBroken, 4000) -- Notification when you didn't break the horse 
+	    VORPcore.NotifyRightTip(Config.Language.NotBroken,4000)
         end
     else
-        TriggerEvent("vorp:TipRight", Config.Language.NoMount, 4000) -- Notification when you don't have a mount
+    	VORPcore.NotifyRightTip(Config.Language.NoMount,4000)
     end
 end
 
-function Testo(str, x, y, w, h, enableShadow, col1, col2, col3, a, centre)
+function Text(str, x, y, w, h, enableShadow, col1, col2, col3, a, centre)
     local str = CreateVarString(10, "LITERAL_STRING", str, Citizen.ResultAsLong())
     SetTextScale(w, h)
     SetTextColor(math.floor(col1), math.floor(col2), math.floor(col3), math.floor(a))
@@ -126,28 +134,21 @@ Citizen.CreateThread(function()
         for i,v in ipairs(Config.trainers) do
             local playerCoords = GetEntityCoords(PlayerPedId())       
             if Vdist(playerCoords, v.coords) <= v.radius and not sold then -- Checking distance between player and trainer
-
                 local job
                 sleep = false
-
                 drawTxt(v.pressToSell, 0.5, 0.9, 0.7, 0.7, 255, 255, 255, 255, true, true)
                 if IsControlJustPressed(2, 0xD9D0E1C0) then
                     if Config.joblocked then 
-                        TriggerEvent('vorp:ExecuteServerCallBack','vorp_sellhorse:getjob', function(result)  
-                            job =   result
-                        end)
-                        while job == nil do 
-                            Wait(100)
-                        end
+                        TriggerServerEvent('vorp_sellhorse:getjob')
+			Wait(200)
                         if job == v.trainerjob then 
                             sellAnimal()     
                             Citizen.Wait(200)
                         else
-                            TriggerEvent("vorp:TipRight", Config.Language.notatrainer.." : "..v.trainerjob, 4000) 
+			    VORPcore.NotifyRightTip(Config.Language.notatrainer.." : "..v.trainerjob,4000)
                         end
                     else
                         sellAnimal()  
-
                     end  
                     Citizen.Wait(1000)       
                 end
@@ -173,12 +174,10 @@ end)
 
 RegisterNetEvent("vorp_sellhorse:loggedtime") --Check if jailed when selecting character event
 AddEventHandler("vorp_sellhorse:loggedtime", function(servertime)
-
     gametime = GetGameTimer()
     seconds = servertime -- max time you want to set
     printtime = seconds
-        while true do
-            
+        while true do       
             Citizen.Wait(0)
             if printtime > 0 then
                 sold = true
@@ -187,9 +186,8 @@ AddEventHandler("vorp_sellhorse:loggedtime", function(servertime)
                 for i,v in ipairs(Config.trainers) do
                     local playerCoords = GetEntityCoords(PlayerPedId())       
                     if Vdist(playerCoords, v.coords) <= v.radius then -- Checking distance between player and trainer
-                         Testo("Time remaining: " .. printtime .. " minutes", 0.50, 0.95, 0.6, 0.6, true, 255, 255, 255, 255, true,10000)
+                         Text("Time remaining: " .. printtime .. " minutes", 0.50, 0.95, 0.6, 0.6, true, 255, 255, 255, 255, true,10000)
                     end
-
                 end
             else
                 Citizen.Wait(1000)
@@ -202,8 +200,6 @@ AddEventHandler("vorp_sellhorse:loggedtime", function(servertime)
 
         end
 end)
-
-
 
 -- DEV TOOLS -- 
 
