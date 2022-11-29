@@ -4,17 +4,7 @@ TriggerEvent("getCore",function(core)
     VorpCore = core
 end)
 
-local VORPInv = {}
-
-VORPInv = exports.vorp_inventory:vorp_inventoryApi()
-
-local User
-local CharInfo
-local steam_id
-local Character
-
-RegisterServerEvent("vorp_sellhorse:salecompletesv")
-AddEventHandler("vorp_sellhorse:salecompletesv", function(animal)
+RegisterServerEvent("vorp_sellhorse:salecompletesv", function(animal)
     local _source = source
     local Character = VorpCore.getUser(_source).getUsedCharacter
     local amountmoney = animal.money
@@ -26,37 +16,35 @@ AddEventHandler("vorp_sellhorse:salecompletesv", function(animal)
 
            if amountmoney then
         Character.addCurrency(0, amountmoney)
-        TriggerClientEvent("vorp:TipRight",_source, "You got "..money, 5000) -- Sold notification      
-           end
+            VORPcore.NotifyRightTip(_source,"You got "..amountmoney,4000)
+          VorpCore.AddWebhook(Config.WebhookTitle, Config.Webhook, fname.. lname.. "has sold a horse for " ..amountmoney, Config.Webhookcolor, Config.Webhookname, Config.Webhooklogo, Config.Webhookfooterlogo, Config.Webhookavatar)
+          end
         
             if amountgold then 
         Character.addCurrency(1, amountgold)
-        TriggerClientEvent("vorp:TipRight",_source, "You got "..gold, 5000) -- Sold notification
+            VORPcore.NotifyRightTip(_source,"You got "..amountgold,4000)
+            VorpCore.AddWebhook(Config.WebhookTitle, Config.Webhook, fname.. lname.. "has sold a horse for " ..amountmoney, Config.Webhookcolor, Config.Webhookname, Config.Webhooklogo, Config.Webhookfooterlogo, Config.Webhookavatar)    
             end
-        
+      
         Character.addCurrency(2, amountrolPoints)
-    
         Character.addXp(amountxp)
 
 end)
 
-
-VORP.addNewCallBack('vorp_sellhorse:getjob', function(source, cb)
+RegisterServerEvent('vorp_sellhorse:getjob', function(source, cb)
     local _source = source
-    local User = VorpCore.getUser(source) -- Return User with functions and all characters
     local Character = VorpCore.getUser(source).getUsedCharacter
     local job = Character.job
     cb(job)
 end)
 
 RegisterServerEvent('vorp_sellhorse:settimer') --Sell horse event
-AddEventHandler('vorp_sellhorse:settimer', function(source)
+AddEventHandler('vorp_sellhorse:settimer', function()
     local _source = source
-    local user_name = GetPlayerName(_source)
-     User = VorpCore.getUser(_source)
-     CharInfo = User.getUsedCharacter
-     steam_id = CharInfo.identifier
-     Character = CharInfo.charIdentifier
+    local User = VorpCore.getUser(_source)
+    local CharInfo = User.getUsedCharacter
+    local steam_id = CharInfo.identifier
+    local Character = CharInfo.charIdentifier
 
     -- TIME
     local time_m = tonumber(Config.sellcooldown)
@@ -64,16 +52,12 @@ AddEventHandler('vorp_sellhorse:settimer', function(source)
     exports.ghmattimysql:execute("INSERT INTO sellhorse (identifier, characterid, time_m) VALUES (@identifier, @characterid, @time)", {["@identifier"] = steam_id, ["@characterid"] = Character, ["@time"] = time_m})
 end)
 
-
-
 RegisterServerEvent("vorp_sellhorse:taketime")--Updates timer
 AddEventHandler("vorp_sellhorse:taketime", function()
     local _source = source
-
     local User = VorpCore.getUser(_source)
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
-
     local Character = CharInfo.charIdentifier
 
     exports.ghmattimysql:execute("SELECT * FROM sellhorse WHERE identifier = @identifier AND characterid = @characterid", {["@identifier"] = steam_id, ["@characterid"] = Character}, function(result)
@@ -89,11 +73,9 @@ AddEventHandler("vorp_sellhorse:taketime", function()
     end)
 end)
 
-
 RegisterServerEvent("vorp_sellhorse:checktime") --Check if jailed when selecting character event
 AddEventHandler("vorp_sellhorse:checktime", function()
     local _source = source
-
     local User = VorpCore.getUser(_source)
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
@@ -111,11 +93,9 @@ AddEventHandler("vorp_sellhorse:checktime", function()
     end)
 end)
 
-
 RegisterServerEvent("vorp_sellhorse:delete")--Delets entry from db
 AddEventHandler("vorp_sellhorse:delete", function()
     local _source = source
-
     local User = VorpCore.getUser(_source)
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
