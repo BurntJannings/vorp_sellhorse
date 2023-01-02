@@ -17,13 +17,13 @@ RegisterServerEvent("vorp_sellhorse:salecompletesv", function(animal)
            if amountmoney then
         Character.addCurrency(0, amountmoney)
             VORPcore.NotifyRightTip(_source,"You got "..amountmoney,4000)
-          VORPcore.AddWebhook(Config.WebhookTitle, Config.Webhook, fname.. lname.. "has sold a horse for " ..amountmoney, Config.Webhookcolor, Config.Webhookname, Config.Webhooklogo, Config.Webhookfooterlogo, Config.Webhookavatar)
+          VORPcore.AddWebhook(Config.WebhookInfo.Title, Config.WebhookInfo.Webhook, fname.. lname.. " has sold a horse for " ..amountmoney, Config.WebhookInfo.Webhookcolor, Config.WebhookInfo.Webhookname, Config.WebhookInfo.Webhooklogo, Config.WebhookInfo.Webhookfooterlogo, Config.WebhookInfo.Webhookavatar)
           end
         
             if amountgold then 
         Character.addCurrency(1, amountgold)
             VORPcore.NotifyRightTip(_source,"You got "..amountgold,4000)
-            VORPcore.AddWebhook(Config.WebhookTitle, Config.Webhook, fname.. lname.. "has sold a horse for " ..amountmoney, Config.Webhookcolor, Config.Webhookname, Config.Webhooklogo, Config.Webhookfooterlogo, Config.Webhookavatar)    
+          VORPcore.AddWebhook(Config.WebhookInfo.Title, Config.WebhookInfo.Webhook, fname.. lname.. " has sold a horse for " ..amountgold, Config.WebhookInfo.Webhookcolor, Config.WebhookInfo.Webhookname, Config.WebhookInfo.Webhooklogo, Config.WebhookInfo.Webhookfooterlogo, Config.WebhookInfo.Webhookavatar)
             end
       
         Character.addCurrency(2, amountrolPoints)
