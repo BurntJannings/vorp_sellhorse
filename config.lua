@@ -14,6 +14,19 @@ Config.joblocked = false -- lock the trainer so only people with the job can acc
 Config.usecooldown = false
 Config.sellcooldown = 120 -- Amount of minutes for cooldown
 
+Config.usewebhook = false
+--Config.WebhookInfo = {
+--Title = '' --if using webhook, this must be set
+--Webhook = ''  --if using webhook, this must be set
+
+--Optionals, if not set, uses the core by default
+--Webhookcolor = ''
+--Webhookname = ''
+--Webhooklogo = ''
+--Webhookfooterlogo = ''
+--Webhookavatar = ''
+}
+
 Config.trainers = {
     {["trainername"] = "Valentine Trainer", ["trainerjob"] = "trainer",     ["pressToSell"] = "Press [~e~Space~q~] to sell",  ["blip"] = -1103135225,  ["npcmodel"] = "A_M_M_ValFarmer_01",  ["coords"] = vector3(-383.248, 785.823, 114.956),       ["heading"] = 93.60,             ["radius"] = 3.0},
     {["trainername"] = "Strawberry Trainer", ["trainerjob"] = "trainer",    ["pressToSell"] = "Press [~e~Space~q~] to sell",  ["blip"] = -1103135225,  ["npcmodel"] = "A_M_M_ValFarmer_01",  ["coords"] = vector3(-1831.299, -596.048, 153.619),      ["heading"] = 278.79,           ["radius"] = 3.0},
