@@ -45,7 +45,7 @@ RegisterServerEvent('vorp_sellhorse:getjob', function()
 end)
 
 RegisterServerEvent('vorp_sellhorse:settimer') --Sell horse event
-AddEventHandler('vorp_sellhorse:settimer', function()
+AddEventHandler('vorp_sellhorse:settimer', function(source)
     local _source = source
     local User = VORPcore.getUser(_source)
     local CharInfo = User.getUsedCharacter
