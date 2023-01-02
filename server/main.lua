@@ -6,7 +6,7 @@ end)
 
 RegisterServerEvent("vorp_sellhorse:salecompletesv", function(animal)
     local _source = source
-    local Character = VorpCore.getUser(_source).getUsedCharacter
+    local Character = VORPcore.getUser(_source).getUsedCharacter
     local amountmoney = animal.money
     local amountgold = animal.gold
     local amountrolPoints = animal.rolPoints
