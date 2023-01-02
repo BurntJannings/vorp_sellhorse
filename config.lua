@@ -16,15 +16,15 @@ Config.sellcooldown = 120 -- Amount of minutes for cooldown
 
 Config.usewebhook = false
 --Config.WebhookInfo = {
---Title = '' --if using webhook, this must be set
---Webhook = ''  --if using webhook, this must be set
+--Title = '' ,--if using webhook, this must be set
+--Webhook = '',  --if using webhook, this must be set
 
 --Optionals, if not set, uses the core by default
---Webhookcolor = ''
---Webhookname = ''
---Webhooklogo = ''
---Webhookfooterlogo = ''
---Webhookavatar = ''
+--Webhookcolor = '',
+--Webhookname = '',
+--Webhooklogo = '',
+--Webhookfooterlogo = '',
+--Webhookavatar = '',
 }
 
 Config.trainers = {
