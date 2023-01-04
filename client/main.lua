@@ -87,7 +87,7 @@ function sellAnimal() -- Selling horse function
     local model = GetEntityModel(horse)
     if model ~= 0 then
         print("model",model)
-      -- if tamestate > 0 then -- checks to see if you recently broke the horse in
+       if tamestate > 0 then -- checks to see if you recently broke the horse in
             if Config.Animals[model] ~= nil then -- Paying for animals
                 local animal = Config.Animals[model]          
                 TriggerServerEvent("vorp_sellhorse:salecompletesv", animal)   
@@ -104,9 +104,9 @@ function sellAnimal() -- Selling horse function
             else
 		    VORPcore.NotifyRightTip(Config.Language.NotInTheTrainer,4000)
             end
-       -- else
-	   -- VORPcore.NotifyRightTip(Config.Language.NotBroken,4000)
-       -- end
+        else
+	    VORPcore.NotifyRightTip(Config.Language.NotBroken,4000)
+        end
     else
     	VORPcore.NotifyRightTip(Config.Language.NoMount,4000)
     end
