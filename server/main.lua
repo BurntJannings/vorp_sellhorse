@@ -12,7 +12,7 @@ RegisterServerEvent("vorp_sellhorse:salecompletesv", function(animal)
     local amountrolPoints = animal.rolPoints
     local amountxp = animal.xp
     local fname = Character.firstname
-    local lname = Character.lasname
+    local lname = Character.lastname
 
     TriggerEvent("vorp_sellhorse:settimer", _source)
 
