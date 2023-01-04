@@ -65,9 +65,9 @@ end
 local tamestate = 0
 
 Citizen.CreateThread(function() -- captures event when you break horse in
+    if not IsEntityDead(PlayerPedId()) then
 	while true do
-	if not IsEntityDead(PlayerPedId()) then
-		Citizen.Wait(1) 
+    Wait(0)
 		local size = GetNumberOfEvents(0) 
 		if size > 0 then 
 			for i = 0, size - 1 do
@@ -75,8 +75,8 @@ Citizen.CreateThread(function() -- captures event when you break horse in
                 	if eventAtIndex == GetHashKey("EVENT_HORSE_BROKEN") then
                     	tamestate = 1
                 	end
-            	end
             end
+        end
 	end
     end
 end)
@@ -87,12 +87,12 @@ function sellAnimal() -- Selling horse function
     local model = GetEntityModel(horse)
     if model ~= 0 then
         print("model",model)
-       if tamestate > 0 then -- checks to see if you recently broke the horse in
+      -- if tamestate > 0 then -- checks to see if you recently broke the horse in
             if Config.Animals[model] ~= nil then -- Paying for animals
                 local animal = Config.Animals[model]          
                 TriggerServerEvent("vorp_sellhorse:salecompletesv", animal)   
-		VORPcore.NotifyRightTip(Config.Language.AnimalSold,4000)
-		DeletePed(horse)
+		        VORPcore.NotifyRightTip(Config.Language.AnimalSold,4000)
+		        DeletePed(horse)
                 if Config.usecooldown then
                 TriggerEvent('vorp_sellhorse:loggedtime', Config.sellcooldown)
                  Wait(100) 
@@ -102,11 +102,11 @@ function sellAnimal() -- Selling horse function
                 tamestate = 0	
                 end
             else
-		VORPcore.NotifyRightTip(Config.Language.NotInTheTrainer,4000)
+		    VORPcore.NotifyRightTip(Config.Language.NotInTheTrainer,4000)
             end
-        else
-	    VORPcore.NotifyRightTip(Config.Language.NotBroken,4000)
-        end
+       -- else
+	   -- VORPcore.NotifyRightTip(Config.Language.NotBroken,4000)
+       -- end
     else
     	VORPcore.NotifyRightTip(Config.Language.NoMount,4000)
     end
@@ -130,13 +130,14 @@ Citizen.CreateThread(function()
         for i,v in ipairs(Config.trainers) do
             local playerCoords = GetEntityCoords(PlayerPedId())       
             if Vdist(playerCoords, v.coords) <= v.radius and not sold then -- Checking distance between player and trainer
+                if not IsEntityDead(PlayerPedId()) then
                 local job
                 sleep = false
                 drawTxt(v.pressToSell, 0.5, 0.9, 0.7, 0.7, 255, 255, 255, 255, true, true)
                 if IsControlJustPressed(2, 0xD9D0E1C0) then
                     if Config.joblocked then 
                         TriggerServerEvent('vorp_sellhorse:getjob')
-			Wait(200)
+			            Wait(200)
                         if job == v.trainerjob then 
                             sellAnimal()     
                             Citizen.Wait(200)
@@ -148,6 +149,7 @@ Citizen.CreateThread(function()
                     end  
                     Citizen.Wait(1000)       
                 end
+            end
             end
         end  
         if sleep then 
